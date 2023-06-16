@@ -3,7 +3,7 @@
             [clojure.java.io :as io]
             [squiggle.primitives :as primitives]
             [squiggle.open-scad :as open-scad]
-            [squiggle.examples.rabbit :as rabbit]))
+            [squiggle.open-scad :as os]))
 
 
 (defn generate-polyhedron

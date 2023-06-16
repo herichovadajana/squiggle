@@ -69,6 +69,11 @@
   [& items]
   (str "intersection() {" (string/join " " items) "}"))
 
+(defn mirror
+  "Generates OpenSCAD `mirror` call"
+  [{:keys [x y z] :or {x 0 y 0 z 0}} & items]
+  (str (format "mirror([%s,%s,%s]) {" x y z) (string/join " " items) "}"))
+
 (defn linear-extrude
   "Generates OpenSCAD `linear_extrude` call"
   [{:keys [height] :or {height 1}} & items]
@@ -119,3 +124,21 @@
   "Generates OpenSCAD `color` call effective for child objects"
   [[r g b] & items]
   (str (format "color([%s,%s,%s]) {" r g b) (string/join " " items) "}"))
+
+;;; custom ;;;
+
+(defn rounded-cylinder
+  "Returns OpenSCAD string object of cylinder with rounded top"
+  [{:keys [radius height rounding-radius rounding]
+    :or   {rounding-radius (/ radius 10)
+           rounding :top}}]
+  (let [straight-x (- radius rounding-radius)
+        straight-y (- height rounding-radius)]
+    (rotate-extrude
+     (square [straight-x height])
+     (translate (if (= :top rounding)
+                     {:x straight-x :y straight-y}
+                     {:x straight-x :y rounding-radius})
+                   (circle {:radius rounding-radius}))
+     (translate (when (= :bottom rounding) {:y rounding-radius})
+                   (square [radius straight-y])))))

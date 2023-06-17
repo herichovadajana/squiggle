@@ -2,9 +2,12 @@
   (:require [squiggle.open-scad :as os]
             [squiggle.core :as core]))
 
+(def resolution 300)
+
 (def body
   (os/difference (os/scale {:x 1.5}
-                           (os/sphere {:radius 10}))
+                           (os/sphere {:radius 10
+                                       :resolution resolution}))
                  (os/translate {:z -17 :x -50 :y -50}
                                (os/cube [100 100 10] :center true))))
 
@@ -16,14 +19,16 @@
 (def head
   (os/translate {:x -5 :z 16}
                 (os/scale {:x 1.1 :y 1.1} 
-                          (os/sphere {:radius 10}))))
+                          (os/sphere {:radius 10
+                                      :resolution resolution}))))
 
 (defn feather [translate-x translate-y feather-size rotate-y]
   (os/rotate {:y rotate-y}
              (os/translate {:x translate-x
                             :y translate-y}
                            (os/scale {:x 2.9 :z 1.5}
-                                     (os/sphere {:radius feather-size})))))
+                                     (os/sphere {:radius feather-size
+                                                 :resolution resolution})))))
 
 (defn row-of-feathers [translate-x translate-y feather-size feathers-count]
   (map (partial feather translate-x translate-y feather-size)
@@ -42,10 +47,13 @@
              :z 0.5}
             (os/hull
              (os/scale {:y 1.3}
-                       (os/rotate-extrude {:angle 180}
+                       (os/rotate-extrude {:angle 180
+                                           :resolution resolution}
                                           (os/hull
-                                           (os/translate {:x 15} (os/circle {:radius 1}))
-                                           (os/translate {:x 10} (os/circle {:radius 4}))))))))
+                                           (os/translate {:x 15} (os/circle {:radius 1
+                                                                             :resolution resolution}))
+                                           (os/translate {:x 10} (os/circle {:radius 4
+                                                                             :resolution resolution}))))))))
 
 (def text
   (os/translate {:z 1
@@ -59,10 +67,12 @@
 (def hat
   (os/difference (os/union
                   (os/cylinder {:radius 8
-                                :height 1})
+                                :height 1
+                                :resolution resolution})
                   (os/rounded-cylinder {:radius 5
-                                        :height 7})
-                  (os/rotate-extrude
+                                        :height 7
+                                        :resolution resolution})
+                  (os/rotate-extrude {:resolution resolution}
                    (os/translate {:x 8} (os/circle {:radius 1}))))
                  (os/translate {:z 6
                                 :x -5

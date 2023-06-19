@@ -111,7 +111,7 @@
                                  :y -5} eye)
         left-eye (os/mirror {:y 1} right-eye)
         hat (os/rotate {:x 25}
-                       (os/translate {:z 24
+                       (os/translate {:z 23.6
                                       :x -5
                                       :y 6}
                                      (os/scale {:x 0.7

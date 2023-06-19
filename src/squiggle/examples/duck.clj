@@ -56,7 +56,7 @@
                                                                              :resolution resolution}))))))))
 
 (def text
-  (os/translate {:z 1
+  (os/translate {:z 0
                  :x 1.5
                  :y 1.5}
                 (os/linear-extrude {:height 1}

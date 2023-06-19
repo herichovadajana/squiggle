@@ -1,7 +1,7 @@
 (ns squiggle.open-scad
   (:require [clojure.string :as string]))
 
-;; Include library 
+;; Include library
 (defn include
   "Generates OpenSCAD include library call"
   [library]
@@ -129,16 +129,17 @@
 
 (defn rounded-cylinder
   "Returns OpenSCAD string object of cylinder with rounded top"
-  [{:keys [radius height rounding-radius rounding]
+  [{:keys [radius height rounding-radius rounding resolution]
     :or   {rounding-radius (/ radius 10)
-           rounding :top}}]
+           rounding :top
+           resolution 100}}]
   (let [straight-x (- radius rounding-radius)
         straight-y (- height rounding-radius)]
-    (rotate-extrude
+    (rotate-extrude {:resolution resolution}
      (square [straight-x height])
      (translate (if (= :top rounding)
-                     {:x straight-x :y straight-y}
-                     {:x straight-x :y rounding-radius})
-                   (circle {:radius rounding-radius}))
+                  {:x straight-x :y straight-y}
+                  {:x straight-x :y rounding-radius})
+                (circle {:radius rounding-radius}))
      (translate (when (= :bottom rounding) {:y rounding-radius})
-                   (square [radius straight-y])))))
+                (square [radius straight-y])))))

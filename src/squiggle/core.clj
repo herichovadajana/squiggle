@@ -3,23 +3,17 @@
             [clojure.java.io :as io]
             [squiggle.primitives :as primitives]
             [squiggle.open-scad :as open-scad]
-            [squiggle.open-scad :as os]))
+            [clojure.tools.logging :as log]))
 
-
-(defn generate-polyhedron
-  "Generates OpenSCAD polyhedron code"
-  [{:keys [points faces]}]
-  (letfn [(format-coordinates [v]
-            (format "[%f,%f,%f]" (double (get v 0)) (double (get v 1)) (double (get v 2))))
-          (format-indexes [indexes]
-            (format "[%s]" (string/join "," indexes)))]
-    (format "polyhedron(points=[%s],faces=[%s]);"
-            (string/join "," (map format-coordinates points))
-            (string/join "," (map format-indexes faces)))))
 
 ;; Utility fn to write to file
-(defn write-to-file [path & content]
-  (io/make-parents path)
-  (spit path (string/join "\n" content)))
 
-(def write (partial write-to-file (str (System/getenv "HOME") "/CAD/squiggle.scad")))
+(def scad-file-path "CAD/squiggle.scad")
+
+(defn create-scad-file [_]
+  (let [_ (io/make-parents scad-file-path)]
+    (spit scad-file-path "")
+    (log/info "File squiggle.scad created")))
+
+(defn write [content]
+  (spit scad-file-path content))

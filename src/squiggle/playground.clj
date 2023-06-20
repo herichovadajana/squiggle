@@ -8,5 +8,5 @@
   (os/sphere {:radius radius
               :resolution resolution}))
 
-(def render (core/write (my-design 1)))
+(core/write (my-design 1))
 

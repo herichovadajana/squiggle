@@ -4,22 +4,17 @@
 
 (def resolution 300)
 
-(def tail-cut (os/rotate {:y -22}
-                         (os/translate {:x 8 :z 7}
-                                       (os/scale {:x 3 :y 2}
-                                                 (os/sphere {:radius 5})))))
-
 (def tail
   (os/rotate {:y -25}
              (os/translate {:x 14 :z 2}
                            (os/scale {:x 2 :y -0.1} (os/sphere {:radius 2})))))
 
-(def body  
-  (os/difference (os/scale {:x 1.5}
-                           (os/sphere {:radius 10
-                                       :resolution resolution}))
-                 (os/translate {:z -17 :x -50 :y -50}
-                               (os/cube [100 100 10] :center true))))
+(def tail-cut (os/rotate {:y -22}
+                (os/translate {:x 8 :z 7}
+                  (os/scale {:x 3 :y 2}
+                    (os/sphere {:radius 5})))))
+
+
 (defn feather [translate-x translate-y feather-size rotate-y]
   (os/rotate {:y rotate-y}
              (os/translate {:x translate-x
@@ -33,6 +28,7 @@
     (map (partial feather translate-x translate-y feather-size)
          feather-angles)))
 
+
 (defn create-wing [{:keys [outer-feathers-count outer-feather-size
                            inner-feathers-count inner-feather-size]}]
   (apply os/union
@@ -40,6 +36,12 @@
                 (row-of-feathers 5 0 outer-feather-size outer-feathers-count)
                 (row-of-feathers 3.5 -1.1 inner-feather-size inner-feathers-count))))
 
+(def body  
+  (os/difference (os/scale {:x 1.5}
+                           (os/sphere {:radius 10
+                                       :resolution resolution}))
+                 (os/translate {:z -17 :x -50 :y -50}
+                               (os/cube [100 100 10]))))
 
 (def head
   (os/translate {:x -5 :z 16}
@@ -69,7 +71,6 @@
                                                          :resolution resolution}))
                        (os/translate {:x 10} (os/circle {:radius 4
                                                          :resolution resolution})))))))
-
 (def text
   (os/linear-extrude {:height 1}
                      (os/text {:text "JUXT"
@@ -128,7 +129,13 @@
               (os/difference (os/hull body tail) tail-cut))))
 
 
-(def render (core/write duck))
+
+(core/write duck)
+
+
+
+
+
 
 
 
